@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Thesaurus Rex",
+  "description": "Become an efficient reader!",
+  "icons": {
+    "16": "assets/trexpng.png",
+    "32": "assets/trexpng.png",
+    "48": "assets/trexpng.png",
+    "128": "assets/trexpng.png"
+  },
+  "version": "1.0",
+  "action": {
+    "default_popup": "index.html"
+  }
+}
