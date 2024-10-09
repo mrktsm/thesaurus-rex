@@ -7,9 +7,9 @@ export default function Switch() {
     <div
       onClick={() => setIsSelected(!isSelected)}
       className={classNames(
-        "flex w-10 h-5 bg-gray-500 rounded-full transition-all duration-300 shadow-lg cursor-pointer", // Adjusted width and height
+        "flex w-10 h-5 bg-blue-900 rounded-full transition-all duration-300 shadow-lg cursor-pointer", // Adjusted width and height
         {
-          "bg-sky-500": isSelected,
+          "bg-sky-400": isSelected,
         }
       )}
     >
