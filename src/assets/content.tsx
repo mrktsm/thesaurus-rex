@@ -37,14 +37,13 @@ document.addEventListener("selectionchange", () => {
     // Set styles for the button
     button.style.backgroundColor = "#3890fa"; // Button color
     button.style.color = "#FFFFFF"; // Text color
-    button.style.border = "3px solid #2C73C8"; // Border color
+    button.style.border = "2px solid #4299e1"; // Border color
     button.style.cursor = "pointer";
     button.style.borderRadius = "15px";
 
-    // Adjust padding and font size to make the button 20% bigger
-    button.style.padding = "4.2px 6.6px"; // Increase padding by 20%
-    button.style.fontSize = "0.84em"; // Increase font size by 20%
-    button.style.fontWeight = "bold"; // Make the text bold
+    // Adjust padding and font size to make the button 10% smaller
+    button.style.padding = "3.5px 7px"; // Adjust padding to 3.5px top/bottom and 7px left/right
+    button.style.fontSize = "0.9em"; // Reduce font size to 90% of the original
 
     // Append the button to the document body
     document.body.appendChild(button);

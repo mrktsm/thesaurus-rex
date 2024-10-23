@@ -17,5 +17,15 @@
       "matches": ["<all_urls>"],
       "js": ["assets/content.js"]
     }
+  ],
+  "content_security_policy": {
+    "script-src": "self",
+    "object-src": "self"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["*.html"],
+      "matches": ["<all_urls>"]
+    }
   ]
 }

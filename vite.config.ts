@@ -8,12 +8,10 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: "index.html", // Include the main entry point
-        content: "src/assets/content.ts", // Your content script entry file
+        content: "src/assets/content.tsx", // Your content script entry file
       },
       output: {
         entryFileNames: `assets/[name].js`,
-        chunkFileNames: `assets/[name].js`,
-        assetFileNames: `assets/[name].[ext]`,
       },
     },
   },
