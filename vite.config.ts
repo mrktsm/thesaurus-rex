@@ -9,6 +9,7 @@ export default defineConfig({
       input: {
         main: "index.html", // Include the main entry point
         content: "src/assets/content.tsx", // Your content script entry file
+        modal: "modal.html", // The modal HTML
       },
       output: {
         entryFileNames: `assets/[name].js`,

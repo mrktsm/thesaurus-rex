@@ -18,39 +18,68 @@ document.addEventListener("selectionchange", () => {
     const range = selection.getRangeAt(0);
     const rect = range.getBoundingClientRect();
 
+    // Ensure the rect is defined
+    if (!rect) return;
+
     // Determine the number of selected words
     const wordCount = selectedText.split(/\s+/).length;
 
     // Create the button
     button = document.createElement("button");
-
-    // Set button text based on the number of words selected
     button.textContent = wordCount === 1 ? "Meaning" : "Summarize";
 
-    // Position the button right below the selected text
+    // Position the button below the selected text
     button.style.position = "absolute";
-    button.style.top = `${rect.bottom + window.scrollY + 5}px`; // Adjust position below the selected text
+    button.style.top = `${rect.bottom + window.scrollY + 10}px`; // Position below the text
     button.style.left = `${rect.left + window.scrollX + rect.width / 2}px`; // Center horizontally
-    button.style.transform = "translateX(-50%)"; // Center the button by moving it to the left by half its width
-    button.style.zIndex = "9999"; // Ensure it appears above other elements
-
-    // Set styles for the button
+    button.style.transform = "translateX(-50%)";
+    button.style.zIndex = "9999";
     button.style.backgroundColor = "#3890fa"; // Button color
     button.style.color = "#FFFFFF"; // Text color
-    button.style.border = "2px solid #4299e1"; // Border color
+    button.style.border = "3px solid #4299e1"; // Border color
     button.style.cursor = "pointer";
     button.style.borderRadius = "15px";
+    button.style.padding = "4px 8px";
+    button.style.fontSize = "0.85em";
 
-    // Adjust padding and font size to make the button 10% smaller
-    button.style.padding = "3.5px 7px"; // Adjust padding to 3.5px top/bottom and 7px left/right
-    button.style.fontSize = "0.9em"; // Reduce font size to 90% of the original
-
-    // Append the button to the document body
     document.body.appendChild(button);
 
-    // Add a click event to show an alert
+    // Show the modal when the button is clicked
     button.addEventListener("click", () => {
-      alert(`You selected: ${selectedText}`);
+      createIframeWithModal(selectedText);
     });
   }
 });
+
+function createIframeWithModal(selectedText: string) {
+  let dialog: HTMLDialogElement | null = null;
+
+  // Remove existing dialog if it exists
+  if (dialog && document.body.contains(dialog)) {
+    document.body.removeChild(dialog);
+    dialog = null;
+  }
+
+  // Create the dialog
+  dialog = document.createElement("dialog");
+  dialog.style.width = "80%";
+  dialog.style.height = "80%";
+  dialog.style.border = "none";
+  dialog.style.borderRadius = "10px";
+  dialog.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.2)";
+  document.body.appendChild(dialog);
+
+  // Create and append iframe inside dialog
+  const iframe = document.createElement("iframe");
+
+  // Pass selectedText as a query parameter
+  const encodedText = encodeURIComponent(selectedText);
+  iframe.src = `${chrome.runtime.getURL("modal.html")}?text=${encodedText}`; // Load modal.html with selected text
+  iframe.style.width = "100%";
+  iframe.style.height = "100%";
+  iframe.style.border = "none";
+  dialog.appendChild(iframe);
+
+  // Show the dialog
+  dialog.showModal();
+}
