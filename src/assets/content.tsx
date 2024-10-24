@@ -11,51 +11,58 @@ document.addEventListener("selectionchange", () => {
     button = null;
   }
 
-  if (selectedText.length > 0) {
-    const selection = window.getSelection();
-    if (!selection) return;
+  // Check if definitionEnabled is true before proceeding
+  chrome.storage.local.get(["definitionEnabled"], (result) => {
+    const isDefinitionEnabled = result.definitionEnabled || false;
 
-    const range = selection.getRangeAt(0);
-    const rect = range.getBoundingClientRect();
+    if (selectedText.length > 0) {
+      const selection = window.getSelection();
+      if (!selection) return;
 
-    if (!rect) return;
+      const range = selection.getRangeAt(0);
+      const rect = range.getBoundingClientRect();
 
-    // Determine the number of selected words
-    const wordCount = selectedText.split(/\s+/).length;
+      if (!rect) return;
 
-    // Create the button
-    button = document.createElement("button");
-    button.textContent = wordCount === 1 ? "Meaning" : "Summarize";
+      // Determine the number of selected words
+      const wordCount = selectedText.split(/\s+/).length;
+      // Temporary if statement to not create the summarize button update in version 2
+      if (wordCount === 1 && isDefinitionEnabled) {
+        // Create the button
+        button = document.createElement("button");
+        button.textContent = wordCount === 1 ? "Define" : "Summarize";
 
-    // Position the button below the selected text
-    button.style.position = "absolute";
-    button.style.top = `${rect.bottom + window.scrollY + 10}px`;
-    button.style.left = `${rect.left + window.scrollX + rect.width / 2}px`;
-    button.style.transform = "translateX(-50%)";
-    button.style.zIndex = "9999";
-    button.style.backgroundColor = "#EFF6FF";
-    button.style.color = "#0F172A";
-    button.style.border = "2px solid 1E3A8A";
-    button.style.cursor = "pointer";
-    button.style.borderRadius = "5px";
-    button.style.padding = "4px 8px";
-    button.style.fontSize = "0.85em";
+        // Position the button below the selected text
+        button.style.position = "absolute";
+        button.style.top = `${rect.bottom + window.scrollY + 10}px`;
+        button.style.left = `${rect.left + window.scrollX + rect.width / 2}px`;
+        button.style.transform = "translateX(-50%)";
+        button.style.zIndex = "9999";
+        button.style.backgroundColor = "#EFF6FF";
+        button.style.color = "#0F172A";
+        button.style.border = "2px solid 1E3A8A";
+        button.style.cursor = "pointer";
+        button.style.borderRadius = "5px";
+        button.style.padding = "4px 8px";
+        button.style.fontSize = "0.85em";
 
-    button.style.width = "80px"; // Set a fixed width
-    button.style.height = "28px"; // Set a fixed height
-    button.style.minWidth = "80px"; // Ensure minimum width
-    button.style.display = "flex"; // Use flexbox for centering
-    button.style.justifyContent = "center"; // Center text horizontally
-    button.style.alignItems = "center"; // Center text vertically
-    button.style.lineHeight = "1"; // Prevent line height from affecting size
+        button.style.width = "80px"; // Set a fixed width
+        button.style.height = "28px"; // Set a fixed height
+        button.style.minWidth = "80px"; // Ensure minimum width
+        button.style.display = "flex"; // Use flexbox for centering
+        button.style.justifyContent = "center"; // Center text horizontally
+        button.style.alignItems = "center"; // Center text vertically
+        button.style.lineHeight = "1"; // Prevent line height from affecting size
 
-    document.body.appendChild(button);
+        document.body.appendChild(button);
 
-    // Show the modal when the button is clicked
-    button.addEventListener("click", () => {
-      createIframeWithModal(selectedText, rect);
-    });
-  }
+        // Show the modal when the button is clicked
+        button.addEventListener("click", () => {
+          createIframeWithModal(selectedText, rect);
+        });
+      }
+    }
+  });
 });
 
 function createIframeWithModal(selectedText: string, selectionRect: DOMRect) {
