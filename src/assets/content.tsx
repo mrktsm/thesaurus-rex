@@ -8,17 +8,16 @@ document.addEventListener("selectionchange", () => {
     if (document.body.contains(button)) {
       document.body.removeChild(button);
     }
-    button = null; // Reset the button variable
+    button = null;
   }
 
   if (selectedText.length > 0) {
     const selection = window.getSelection();
-    if (!selection) return; // Ensure selection is not null
+    if (!selection) return;
 
     const range = selection.getRangeAt(0);
     const rect = range.getBoundingClientRect();
 
-    // Ensure the rect is defined
     if (!rect) return;
 
     // Determine the number of selected words
@@ -30,28 +29,41 @@ document.addEventListener("selectionchange", () => {
 
     // Position the button below the selected text
     button.style.position = "absolute";
-    button.style.top = `${rect.bottom + window.scrollY + 10}px`; // Position below the text
-    button.style.left = `${rect.left + window.scrollX + rect.width / 2}px`; // Center horizontally
+    button.style.top = `${rect.bottom + window.scrollY + 10}px`;
+    button.style.left = `${rect.left + window.scrollX + rect.width / 2}px`;
     button.style.transform = "translateX(-50%)";
     button.style.zIndex = "9999";
-    button.style.backgroundColor = "#3890fa"; // Button color
-    button.style.color = "#FFFFFF"; // Text color
-    button.style.border = "3px solid #4299e1"; // Border color
+    button.style.backgroundColor = "#EFF6FF";
+    button.style.color = "#0F172A";
+    button.style.border = "2px solid 1E3A8A";
     button.style.cursor = "pointer";
-    button.style.borderRadius = "15px";
+    button.style.borderRadius = "5px";
     button.style.padding = "4px 8px";
     button.style.fontSize = "0.85em";
+
+    button.style.width = "80px"; // Set a fixed width
+    button.style.height = "28px"; // Set a fixed height
+    button.style.minWidth = "80px"; // Ensure minimum width
+    button.style.display = "flex"; // Use flexbox for centering
+    button.style.justifyContent = "center"; // Center text horizontally
+    button.style.alignItems = "center"; // Center text vertically
+    button.style.lineHeight = "1"; // Prevent line height from affecting size
 
     document.body.appendChild(button);
 
     // Show the modal when the button is clicked
     button.addEventListener("click", () => {
-      createIframeWithModal(selectedText);
+      createIframeWithModal(selectedText, rect);
     });
   }
 });
 
-function createIframeWithModal(selectedText: string) {
+function createIframeWithModal(selectedText: string, selectionRect: DOMRect) {
+  if (button && document.body.contains(button)) {
+    document.body.removeChild(button);
+    button = null;
+  }
+
   let dialog: HTMLDialogElement | null = null;
 
   // Remove existing dialog if it exists
@@ -62,24 +74,105 @@ function createIframeWithModal(selectedText: string) {
 
   // Create the dialog
   dialog = document.createElement("dialog");
-  dialog.style.width = "80%";
-  dialog.style.height = "80%";
+
+  // Add backdrop styles
+  const styleSheet = document.createElement("style");
+  styleSheet.textContent = `
+    dialog::backdrop {
+      background: none;
+    }
+  `;
+  document.head.appendChild(styleSheet);
+
+  dialog.style.width = "fit-content";
+  dialog.style.height = "fit-content";
   dialog.style.border = "none";
-  dialog.style.borderRadius = "10px";
-  dialog.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.2)";
-  document.body.appendChild(dialog);
+  dialog.style.borderRadius = "4px";
+  dialog.style.padding = "0";
+  dialog.style.backgroundColor = "transparent";
+  dialog.style.overflow = "hidden";
+  dialog.style.boxShadow = "none";
+  dialog.style.position = "absolute"; // Ensure fixed positioning
+  dialog.style.margin = "0"; // Remove default margins
 
   // Create and append iframe inside dialog
   const iframe = document.createElement("iframe");
-
-  // Pass selectedText as a query parameter
   const encodedText = encodeURIComponent(selectedText);
-  iframe.src = `${chrome.runtime.getURL("modal.html")}?text=${encodedText}`; // Load modal.html with selected text
-  iframe.style.width = "100%";
-  iframe.style.height = "100%";
+  iframe.src = `${chrome.runtime.getURL("modal.html")}?text=${encodedText}`;
+  iframe.style.width = "0";
+  iframe.style.height = "0";
   iframe.style.border = "none";
-  dialog.appendChild(iframe);
 
-  // Show the dialog
+  dialog.appendChild(iframe);
+  document.body.appendChild(dialog);
   dialog.showModal();
+
+  // Position the dialog after it's shown
+  const positionDialog = () => {
+    if (dialog && iframe.offsetHeight > 0) {
+      const padding = 10; // Space between selection and dialog
+
+      // Calculate initial position (centered above selection)
+      let top =
+        selectionRect.top + window.scrollY - iframe.offsetHeight - padding;
+      let left =
+        selectionRect.left +
+        window.scrollX +
+        selectionRect.width / 2 -
+        iframe.offsetWidth / 2;
+
+      // Adjust if dialog would go off-screen
+      if (top < window.scrollY) {
+        // If not enough space above, put it below the selection
+        top = selectionRect.bottom + window.scrollY + padding;
+      }
+
+      // Adjust horizontal position if needed
+      if (left < 0) {
+        left = padding;
+      } else if (left + iframe.offsetWidth > window.innerWidth) {
+        left = window.innerWidth - iframe.offsetWidth - padding;
+      }
+
+      dialog.style.top = `${top}px`;
+      dialog.style.left = `${left}px`;
+    }
+  };
+
+  // Listen for messages from the iframe
+  const messageHandler = function (event: MessageEvent) {
+    if (event.data.type === "resize") {
+      iframe.style.width = `${event.data.width}px`;
+      iframe.style.height = `${event.data.height}px`;
+      // Reposition dialog after resize
+      positionDialog();
+    }
+  };
+
+  window.addEventListener("message", messageHandler);
+
+  // Add click outside handler
+  const clickHandler = (event: MouseEvent) => {
+    const rect = dialog?.getBoundingClientRect();
+    if (
+      rect &&
+      (event.clientX < rect.left ||
+        event.clientX > rect.right ||
+        event.clientY < rect.top ||
+        event.clientY > rect.bottom)
+    ) {
+      dialog?.close();
+      // Clean up event listeners and styles
+      window.removeEventListener("message", messageHandler);
+      dialog?.removeEventListener("click", clickHandler);
+      if (styleSheet.parentNode) {
+        styleSheet.parentNode.removeChild(styleSheet);
+      }
+      if (document.body.contains(dialog)) {
+        document.body.removeChild(dialog);
+      }
+    }
+  };
+
+  dialog.addEventListener("click", clickHandler);
 }

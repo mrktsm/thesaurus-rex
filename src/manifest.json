@@ -27,5 +27,6 @@
       "resources": ["*.html"],
       "matches": ["<all_urls>"]
     }
-  ]
+  ],
+  "permissions": ["activeTab", "scripting"]
 }
