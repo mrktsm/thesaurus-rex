@@ -10,7 +10,6 @@ const Modal = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const url = "https://api.dictionaryapi.dev/api/v2/entries/en/";
-
   const handleSearch = async () => {
     try {
       const response = await fetch(`${url}${selectedText}`);
@@ -92,11 +91,15 @@ const Modal = () => {
         {error && <h3 className="text-center text-red-500">{error}</h3>}
         {result && (
           <div className="mt-0">
-            <div className="flex justify-between items-center">
-              <h3 className="text-2xl text-gray-800">{selectedText}</h3>
-              <button onClick={playSound} className="text-blue-900 bg-blue-50">
-                <FontAwesomeIcon icon={faVolumeUp} className="text-xl" />
+            <div className="flex items-center">
+              <button
+                onClick={playSound}
+                className="text-blue-900 bg-blue-50 size-12 flex items-center justify-center space-x-2"
+                style={{ marginLeft: "-8px" }}
+              >
+                <FontAwesomeIcon icon={faVolumeUp} className="text-lg" />
               </button>
+              <h3 className="text-2xl text-gray-800">{selectedText}</h3>
             </div>
             <div className="details flex gap-2 text-gray-500 mt-3">
               <p>{result.meanings[0]?.partOfSpeech}</p>
