@@ -13,7 +13,7 @@ document.addEventListener("selectionchange", () => {
 
   // Check if definitionEnabled is true before proceeding
   chrome.storage.local.get(["definitionEnabled"], (result) => {
-    const isDefinitionEnabled = result.definitionEnabled || false;
+    const isDefinitionEnabled = result.definitionEnabled || true;
 
     if (selectedText.length > 0) {
       const selection = window.getSelection();
