@@ -201,6 +201,8 @@ function createIframeWithModal(selectedText: string, selectionRect: DOMRect) {
   iframe.style.height = "0";
   iframe.style.border = "none";
 
+  iframe.setAttribute("allow", "autoplay"); // Allow autoplay in iframe
+
   dialog.appendChild(iframe);
   document.body.appendChild(dialog);
   dialog.showModal();

@@ -82,6 +82,14 @@ const Modal = () => {
     }
   }, [selectedText]); // Run when selectedText is set
 
+  useEffect(() => {
+    chrome.storage.local.get(["playSoundEnabled"], (result) => {
+      if (result.playSoundEnabled) {
+        playSound();
+      }
+    });
+  }, [result]); // Run when result changes
+
   return (
     <div
       ref={containerRef}

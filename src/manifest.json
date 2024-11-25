@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Thesaurus Rex",
+  "name": "Thesaurus Rex: Empower Your Vocabulary with One Click",
   "description": "Enhance your reading experience and expand your vocabulary without disrupting your flow.",
   "icons": {
     "16": "assets/trexpng.png",
@@ -8,7 +8,7 @@
     "48": "assets/trexpng.png",
     "128": "assets/trexpng.png"
   },
-  "version": "1.0.1",
+  "version": "1.0.2",
   "action": {
     "default_popup": "index.html"
   },
