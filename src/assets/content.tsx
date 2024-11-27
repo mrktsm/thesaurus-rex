@@ -13,6 +13,7 @@ document.addEventListener("selectionchange", () => {
 
   // Check if definitionEnabled is true before proceeding
   chrome.storage.local.get(["definitionEnabled"], (result) => {
+    console.log(result.definitionEnabled);
     const isDefinitionEnabled = result.definitionEnabled || true;
 
     if (selectedText.length > 0) {
@@ -47,6 +48,40 @@ document.addEventListener("selectionchange", () => {
               opacity: 1;
             }
           }
+
+          button::before {
+            content: "";
+            position: absolute;
+            top: -6.5px; /* Adjust this to position the arrow closer or farther from the button */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent; /* Adjust triangle width */
+            border-right: 6px solid transparent; /* Adjust triangle width */
+            border-bottom: 7px solid #EFF6FF; /* Match the button's background color */
+            z-index: 9999;
+            transition: border-bottom-color 0.3s ease; /* Add transition for smooth color change */
+          }
+
+          button::after {
+            content: "";
+            position: absolute;
+            top: -8.8px; /* Slightly closer to the button to overlap the outer triangle */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+
+            /* Inner triangle for fill */
+            border-left: 8px solid transparent; /* Slightly smaller width */
+            border-right: 8px solid transparent; /* Slightly smaller width */
+            border-bottom: 9.3px solid #0F172A; /* Matches button's background color */å
+          }
+
+          button:hover::before {
+            border-bottom-color: #A5B4FC; /* Hover color to match button's hover background */
+          }
         `;
         document.head.appendChild(styleSheet);
 
@@ -54,18 +89,17 @@ document.addEventListener("selectionchange", () => {
         button.style.opacity = "0"; // Start with 0 opacity
         button.style.transform = "translateX(-50%) scale(0)"; // Start scaled down
 
-        const icon = document.createElement("img");
-        icon.src = chrome.runtime.getURL("/assets/trexpng.png"); // Path to your image
-        icon.alt = "Icon"; // Alt text for the image
-        icon.style.width = "16px"; // Adjust the size of the image as needed
-        icon.style.height = "16px"; // Adjust the size of the image as needed
-        icon.style.display = "block"; // Make sure the image is not hidden
+        // const icon = document.createElement("img");
+        // icon.src = chrome.runtime.getURL("/assets/trexpng.png"); // Path to your image
+        // icon.alt = "Icon"; // Alt text for the image
+        // icon.style.width = "16px"; // Adjust the size of the image as needed
+        // icon.style.height = "16px"; // Adjust the size of the image as needed
+        // icon.style.display = "block"; // Make sure the image is not hidden
 
-        button.appendChild(icon);
+        // button.appendChild(icon);
 
         const textSpan = document.createElement("span");
         textSpan.textContent = "Define";
-        textSpan.style.marginLeft = "4px"; // Add some space between icon and text
         button.appendChild(textSpan);
         // Position the button below the selected text
         button.style.position = "absolute";
@@ -77,18 +111,18 @@ document.addEventListener("selectionchange", () => {
         // Explicitly set the button style to avoid inheritance from parent page
         button.style.backgroundColor = "#EFF6FF";
         button.style.color = "#0F172A";
-        button.style.border = "2px solid 1E3A8A";
+        button.style.border = "2px solid #1E3A8A";
+        button.style.boxSizing = "border-box";
         button.style.cursor = "pointer";
-        button.style.borderRadius = "5px";
+        button.style.borderRadius = "8px";
         button.style.padding = "4px 8px";
         button.style.fontFamily = "Arial, sans-serif"; // Set preferred font explicitly
         button.style.fontSize = "14px"; // Set consistent font size
         button.style.fontWeight = "normal"; // Set consistent font weight
         button.style.lineHeight = "normal"; // Set consistent line height
 
-        button.style.width = "68px"; // Set a fixed width
+        button.style.width = "56px"; // Set a fixed width
         button.style.height = "28px"; // Set a fixed height
-        button.style.minWidth = "28px"; // Ensure minimum width
         button.style.display = "flex"; // Use flexbox for centering
         button.style.justifyContent = "center"; // Center text horizontally
         button.style.alignItems = "center"; // Center text vertically
