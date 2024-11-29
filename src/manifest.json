@@ -28,5 +28,5 @@
       "matches": ["<all_urls>"]
     }
   ],
-  "permissions": ["storage"]
+  "permissions": ["storage", "windows"]
 }

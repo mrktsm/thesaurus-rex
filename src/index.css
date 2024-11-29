@@ -30,7 +30,7 @@ a:hover {
 body {
   margin: 0;
   display: block; /* Changed from flex to block */
-  min-height: 100vh;
+  /* min-height: 100vh; */
 }
 
 h1 {

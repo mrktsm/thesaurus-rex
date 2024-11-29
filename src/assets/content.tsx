@@ -13,8 +13,8 @@ document.addEventListener("selectionchange", () => {
 
   // Check if definitionEnabled is true before proceeding
   chrome.storage.local.get(["definitionEnabled"], (result) => {
-    console.log(result.definitionEnabled);
-    const isDefinitionEnabled = result.definitionEnabled || true;
+    const isDefinitionEnabled =
+      result.definitionEnabled === undefined ? true : result.definitionEnabled;
 
     if (selectedText.length > 0) {
       const selection = window.getSelection();
@@ -33,6 +33,7 @@ document.addEventListener("selectionchange", () => {
         // Create an image element for the icon
 
         button = document.createElement("button");
+        button.className = "define-button";
         const styleSheet = document.createElement("style");
         styleSheet.textContent = `
           @keyframes popUp {
@@ -49,7 +50,7 @@ document.addEventListener("selectionchange", () => {
             }
           }
 
-          button::before {
+          .define-button::before {
             content: "";
             position: absolute;
             top: -6.5px; /* Adjust this to position the arrow closer or farther from the button */
@@ -64,7 +65,7 @@ document.addEventListener("selectionchange", () => {
             transition: border-bottom-color 0.3s ease; /* Add transition for smooth color change */
           }
 
-          button::after {
+          .define-button::after {
             content: "";
             position: absolute;
             top: -8.8px; /* Slightly closer to the button to overlap the outer triangle */
@@ -76,10 +77,10 @@ document.addEventListener("selectionchange", () => {
             /* Inner triangle for fill */
             border-left: 8px solid transparent; /* Slightly smaller width */
             border-right: 8px solid transparent; /* Slightly smaller width */
-            border-bottom: 9.3px solid #0F172A; /* Matches button's background color */å
+            border-bottom: 9.3px solid #1E3A8A; /* Matches button's background color */å
           }
 
-          button:hover::before {
+          .define-button:hover::before {
             border-bottom-color: #A5B4FC; /* Hover color to match button's hover background */
           }
         `;

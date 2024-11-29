@@ -1,11 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVolumeUp } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark as faSolidBookmark } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark as faRegularBookmark } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+interface Bookmark {
+  word: string;
+  partOfSpeech: string;
+  phonetic: string;
+}
 
 const Modal = () => {
   const [result, setResult] = useState<any>(null);
   const [error, setError] = useState("");
   const [selectedText, setSelectedText] = useState("");
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -90,6 +99,47 @@ const Modal = () => {
     });
   }, [result]); // Run when result changes
 
+  useEffect(() => {
+    // Check if the selected word is already bookmarked
+    if (selectedText) {
+      chrome.storage.local.get(["bookmarkedWords"], (result) => {
+        const currentBookmarks: Bookmark[] = result.bookmarkedWords || [];
+        setIsBookmarked(
+          currentBookmarks.some((bookmark) => bookmark.word === selectedText)
+        );
+      });
+    }
+  }, [selectedText]); // Run whenever selectedText changes
+
+  const toggleBookmark = () => {
+    const newBookmarkState = !isBookmarked;
+    setIsBookmarked(newBookmarkState);
+
+    chrome.storage.local.get(["bookmarkedWords"], (storageResult) => {
+      const currentBookmarks: Bookmark[] = storageResult.bookmarkedWords || [];
+      let updatedBookmarks;
+
+      if (newBookmarkState) {
+        // Safely extract properties from the API result
+        const partOfSpeech = result?.meanings?.[0]?.partOfSpeech || "Unknown";
+        const phonetic = result?.phonetic || "Unknown";
+
+        const newBookmark: Bookmark = {
+          word: selectedText,
+          partOfSpeech,
+          phonetic,
+        };
+        updatedBookmarks = [...currentBookmarks, newBookmark];
+      } else {
+        updatedBookmarks = currentBookmarks.filter(
+          (bookmark) => bookmark.word !== selectedText
+        );
+      }
+
+      chrome.storage.local.set({ bookmarkedWords: updatedBookmarks });
+    });
+  };
+
   return (
     <div
       ref={containerRef}
@@ -99,17 +149,28 @@ const Modal = () => {
         {error && <h3 className="text-center text-red-500">{error}</h3>}
         {result && (
           <div className="mt-0">
-            <div className="flex items-center">
+            <div className="flex justify-between">
+              <div className="flex items-center">
+                <button
+                  onClick={playSound}
+                  className="text-blue-900 bg-blue-50 size-12 flex items-center justify-center space-x-2 border-none focus:outline-none"
+                  style={{ marginLeft: "-8px" }}
+                >
+                  <FontAwesomeIcon icon={faVolumeUp} className="text-lg" />
+                </button>
+                <h3 className="text-2xl text-gray-800">{selectedText}</h3>
+              </div>
               <button
-                onClick={playSound}
-                className="text-blue-900 bg-blue-50 size-12 flex items-center justify-center space-x-2"
-                style={{ marginLeft: "-8px" }}
+                onClick={toggleBookmark}
+                className="text-blue-900 bg-blue-50 size-12 flex items-center justify-center space-x-2 border-none focus:outline-none"
               >
-                <FontAwesomeIcon icon={faVolumeUp} className="text-lg" />
+                <FontAwesomeIcon
+                  icon={isBookmarked ? faSolidBookmark : faRegularBookmark}
+                  className="text-lg"
+                />
               </button>
-              <h3 className="text-2xl text-gray-800">{selectedText}</h3>
             </div>
-            <div className="details flex gap-2 text-gray-500 mt-3">
+            <div className="details flex gap-2 text-gray-500 mt-3 ">
               <p>{result.meanings[0]?.partOfSpeech}</p>
               <p>{result.phonetic}</p>
             </div>
