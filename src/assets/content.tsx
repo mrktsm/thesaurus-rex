@@ -53,14 +53,14 @@ document.addEventListener("selectionchange", () => {
           .define-button::before {
             content: "";
             position: absolute;
-            top: -6.5px; /* Adjust this to position the arrow closer or farther from the button */
+            top: -5px; /* Adjust this to position the arrow closer or farther from the button */
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
             border-left: 6px solid transparent; /* Adjust triangle width */
             border-right: 6px solid transparent; /* Adjust triangle width */
-            border-bottom: 7px solid #EFF6FF; /* Match the button's background color */
+            border-bottom: 5px solid #EFF6FF; /* Match the button's background color */
             z-index: 9999;
             transition: border-bottom-color 0.3s ease; /* Add transition for smooth color change */
           }
@@ -68,16 +68,16 @@ document.addEventListener("selectionchange", () => {
           .define-button::after {
             content: "";
             position: absolute;
-            top: -8.8px; /* Slightly closer to the button to overlap the outer triangle */
+            top: -7.5px; /* Slightly closer to the button to overlap the outer triangle */
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
 
             /* Inner triangle for fill */
-            border-left: 8px solid transparent; /* Slightly smaller width */
-            border-right: 8px solid transparent; /* Slightly smaller width */
-            border-bottom: 9.3px solid #1E3A8A; /* Matches button's background color */å
+            border-left: 9px solid transparent; /* Slightly smaller width */
+            border-right: 9px solid transparent; /* Slightly smaller width */
+            border-bottom: 7.5px solid #1E3A8A; /* Matches button's background color */å
           }
 
           .define-button:hover::before {

@@ -19,9 +19,11 @@
     "classnames": "^2.5.1",
     "font": "^0.0.4",
     "fontawesome": "^5.6.3",
+    "npm": "^10.9.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-resizable": "^3.0.5",
+    "react-transition-group": "^4.4.5",
     "resizable": "^2.0.0"
   },
   "devDependencies": {
@@ -31,6 +33,7 @@
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
     "@types/react-resizable": "^3.0.8",
+    "@types/react-transition-group": "^4.4.11",
     "@vitejs/plugin-react": "^4.3.2",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.11.1",

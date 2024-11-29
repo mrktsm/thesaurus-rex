@@ -129,7 +129,7 @@ const Modal = () => {
           partOfSpeech,
           phonetic,
         };
-        updatedBookmarks = [...currentBookmarks, newBookmark];
+        updatedBookmarks = [newBookmark, ...currentBookmarks];
       } else {
         updatedBookmarks = currentBookmarks.filter(
           (bookmark) => bookmark.word !== selectedText
