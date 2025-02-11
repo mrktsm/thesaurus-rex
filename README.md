@@ -2,16 +2,15 @@
 
 **Thesaurus Rex** is a powerful and user-friendly Chrome extension designed to help you quickly access word definitions, use cases, and more. With its intuitive popup interface, you can effortlessly look up words and manage bookmarks for your favorite entries.
 
-![Slide 1](1.jpg)
-![Slide 2](2.jpg)
-![Slide 3](3.jpg)
+![Untitled design (6)](https://github.com/user-attachments/assets/b2282510-9ade-4580-9a3f-4d9c05b8c319)
+
 ---
 
 ## **Installation**
 
 You can easily install **Thesaurus Rex** from the Chrome Web Store:
 
-1. Visit the [Chrome Web Store page](https://chrome.google.com/webstore/detail/thesaurus-rex) (Link to be added once published).
+1. Visit the [Chrome Web Store page](https://chromewebstore.google.com/detail/thesaurus-rex-dictionary/kdndkbfnffbiocjpoaifdpljdphefgpm)
 2. Click **Add to Chrome**.
 3. Once installed, the Thesaurus Rex icon will appear in your browser toolbar. Click on it to begin using the extension.
 
