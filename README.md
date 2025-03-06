@@ -2,7 +2,7 @@
 
 **Thesaurus Rex** is a powerful and user-friendly Chrome extension designed to help you quickly access word definitions, use cases, and more. With its intuitive popup interface, you can effortlessly look up words and manage bookmarks for your favorite entries.
 
-![Untitled design (6)](https://github.com/user-attachments/assets/b2282510-9ade-4580-9a3f-4d9c05b8c319)
+![trex-rounded](https://github.com/user-attachments/assets/f1c1241d-106e-483e-8177-d7254ad0eb78)
 
 ---
 
