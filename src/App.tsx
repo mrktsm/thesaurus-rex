@@ -37,6 +37,7 @@ function App() {
       console.log(`${key} has been set to ${value}`);
     });
   };
+
   const fetchBookmarks = () => {
     chrome.storage.local.get(["bookmarkedWords"], (result) => {
       setBookmarks(result.bookmarkedWords || []);
@@ -65,132 +66,127 @@ function App() {
   }, [currentScreen]);
 
   return (
-    <div className="bg-blue-50 h-300 overflow-hidden">
-      <div className="p-3 w-80">
+    <div className="bg-gray-900 w-80 shadow-lg text-gray-100">
+      <div className="p-4 border-b border-gray-800">
         <header className="flex justify-between items-center">
           <div className="flex items-center">
             <img
-              src="assets/trexpng.png"
+              src="assets/white-border.png"
               alt="Thesaurus Rex Logo"
-              className="w-5 h-5 mr-2"
+              className="w-6 h-6 mr-3 filter brightness-150"
             />
-            <h1 className="text-sm text-left text-gray-900">Thesaurus Rex</h1>
+            <h1 className="text-sm font-medium text-blue-300">Thesaurus Rex</h1>
           </div>
-          <div className="flex justify-between items-center">
-            <button
-              className={`${
-                currentScreen === "settings" ? "text-sky-400" : "text-blue-900"
-              } bg-blue-50 size-5 flex items-center justify-center space-x-2 border-none focus:outline-none`}
+          <div className="flex space-x-4">
+            <FontAwesomeIcon
+              icon={faGear}
+              className={`w-5 h-5 cursor-pointer transition-colors duration-200 ${
+                currentScreen === "settings"
+                  ? "text-blue-400"
+                  : "text-gray-500 hover:text-gray-300"
+              }`}
               onClick={() => setCurrentScreen("settings")}
-            >
-              <FontAwesomeIcon icon={faGear} className="text-lg" />
-            </button>
-            <button
-              className={`${
-                currentScreen === "bookmarks" ? "text-sky-400" : "text-blue-900"
-              } bg-blue-50 size-5 flex items-center justify-center space-x-2 border-none focus:outline-none`}
-              onClick={() => setCurrentScreen("bookmarks")} // change screen
-            >
-              <FontAwesomeIcon icon={faBookBookmark} className="text-lg" />
-            </button>
+            />
+            <FontAwesomeIcon
+              icon={faBookBookmark}
+              className={`w-5 h-5 cursor-pointer transition-colors duration-200 ${
+                currentScreen === "bookmarks"
+                  ? "text-blue-400"
+                  : "text-gray-500 hover:text-gray-300"
+              }`}
+              onClick={() => setCurrentScreen("bookmarks")}
+            />
           </div>
         </header>
       </div>
-      <hr className="w-full border-blue-200 mx-0" />
-      <div className="w-80 flex-1">
+
+      <div className="p-4">
         {currentScreen === "settings" ? (
-          <div className="p-3 w-80">
-            <h2 className="text-sm font-bold text-left mb-4 text-gray-900">
-              Quick settings
+          <div>
+            <h2 className="text-sm font-medium text-blue-400 mb-6">
+              QUICK SETTINGS
             </h2>
-            <div className="mb-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-900">Display Button</span>
-                <div className="ml-auto">
-                  <Switch
-                    isOn={definitionEnabled}
-                    handleToggle={() => {
-                      setDefinitionEnabled(!definitionEnabled);
-                      handleToggle("definitionEnabled", !definitionEnabled);
-                    }}
-                  />
-                </div>
+
+            <div className="mb-6 pb-6 border-b border-gray-800">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm text-gray-100">Display Button</span>
+                <Switch
+                  isOn={definitionEnabled}
+                  handleToggle={() => {
+                    setDefinitionEnabled(!definitionEnabled);
+                    handleToggle("definitionEnabled", !definitionEnabled);
+                  }}
+                />
               </div>
-              <p className="text-xs text-gray-600 mt-2">
-                Enable this setting to show a button on highlighted text for
-                quick access to its definition.
+              <p className="text-xs text-gray-400">
+                Show a button on highlighted text for quick access to
+                definitions
               </p>
-              <hr className="my-3 border-blue-200" />
             </div>
-            {/* Wrapper for Play Sound setting */}
+
             <div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-900">
-                  Play Sound On Definition
-                </span>
-                <div className="ml-auto">
-                  <Switch
-                    isOn={playSoundEnabled}
-                    handleToggle={() => {
-                      setPlaySoundEnabled(!playSoundEnabled);
-                      handleToggle("playSoundEnabled", !playSoundEnabled);
-                    }}
-                  />
-                </div>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm text-gray-100">Play Sound</span>
+                <Switch
+                  isOn={playSoundEnabled}
+                  handleToggle={() => {
+                    setPlaySoundEnabled(!playSoundEnabled);
+                    handleToggle("playSoundEnabled", !playSoundEnabled);
+                  }}
+                />
               </div>
-              <p className="text-xs text-gray-600 mt-2">
-                Enable a sound to play each time a word's definition is shown.
+              <p className="text-xs text-gray-400">
+                Play audio when showing definitions
               </p>
             </div>
           </div>
         ) : (
-          <div className="p-3 w-80">
-            <h2 className="text-sm font-bold text-left mb-4 text-gray-900">
-              Bookmarks
+          <div>
+            <h2 className="text-sm font-medium text-blue-400 mb-4">
+              BOOKMARKS
             </h2>
+
             {bookmarks.length > 0 ? (
-              <div
-                className="bookmarks-container overflow-y-auto max-h-96" // Make this scrollable and limit the height
-              >
-                <TransitionGroup className="space-y-3 overflow-y-auto">
-                  {bookmarks.map((bookmark, index) => (
+              <div className="overflow-y-auto max-h-72 space-y-3 pr-1">
+                <TransitionGroup>
+                  {bookmarks.map((bookmark) => (
                     <CSSTransition
-                      key={bookmark.word} // Use word as key, or prefer a unique ID
+                      key={bookmark.word}
                       timeout={300}
                       classNames="bookmark-item"
                     >
-                      <div className="mb-4">
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <span className="text-sm text-gray-900">
-                              {bookmark.word}
-                            </span>
-                            <p className="text-xs text-gray-600 mt-2">
-                              {bookmark.partOfSpeech} {bookmark.phonetic}
-                            </p>
+                      <div className="bg-gray-800 rounded p-3 relative group">
+                        <div className="pr-6">
+                          <div className="text-gray-100 font-medium mb-1">
+                            {bookmark.word}
                           </div>
-                          <button
-                            className="bg-transparent p-2 text-xs justify-center items-center mt-2 w-8 h-8 rounded-full border-2 border-transparent hover:bg-blue-100 hover:border-blue-500 flex"
-                            onClick={() => removeBookmark(bookmark.word)}
-                          >
-                            <FontAwesomeIcon
-                              icon={faX}
-                              className="text-blue-700 w-3 h-3"
-                            />
-                          </button>
+                          <div className="flex items-center">
+                            <span className="text-xs text-blue-400 mr-2">
+                              {bookmark.partOfSpeech}
+                            </span>
+                            <span className="text-xs text-gray-400">
+                              {bookmark.phonetic}
+                            </span>
+                          </div>
                         </div>
-                        {index < bookmarks.length - 1 && (
-                          <hr className="my-3 border-blue-200" />
-                        )}
+                        <FontAwesomeIcon
+                          icon={faX}
+                          className="w-5 h-5 absolute top-3 right-3 opacity-0 group-hover:opacity-100 text-gray-500 hover:text-gray-300 transition-opacity duration-200 cursor-pointer"
+                          onClick={() => removeBookmark(bookmark.word)}
+                        />
                       </div>
                     </CSSTransition>
                   ))}
                 </TransitionGroup>
               </div>
             ) : (
-              <p className="text-gray-600">
-                No bookmarks yet. Your bookmarked words will appear here.
-              </p>
+              <div className="text-center py-4 text-gray-500">
+                <FontAwesomeIcon
+                  icon={faBookBookmark}
+                  className="w-8 h-8 mb-2"
+                />
+                <p className="text-sm">No bookmarked words yet</p>
+              </div>
             )}
           </div>
         )}

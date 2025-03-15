@@ -1,14 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "Thesaurus Rex: Empower Your Vocabulary with One Click",
-  "description": "Enhance your reading experience and expand your vocabulary without disrupting your flow.",
+  "name": "Thesaurus Rex: Dictionary at a Click",
+  "description": "Improve your reading and grow your vocabulary without disrupting your flow.",
   "icons": {
-    "16": "assets/trexpng.png",
-    "32": "assets/trexpng.png",
-    "48": "assets/trexpng.png",
-    "128": "assets/trexpng.png"
+    "16": "assets/white-border.png",
+    "32": "assets/white-border.png",
+    "48": "assets/white-border.png",
+    "128": "assets/white-border.png"
   },
-  "version": "1.0.2",
+  "version": "2.0.1",
   "action": {
     "default_popup": "index.html"
   },
@@ -28,5 +28,5 @@
       "matches": ["<all_urls>"]
     }
   ],
-  "permissions": ["storage", "windows"]
+  "permissions": ["storage"]
 }

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build-extension": "npm run build && cp src/manifest.json dist/ && cp src/assets/trexpng.png dist/assets",
+    "build-extension": "npm run build && cp src/manifest.json dist/ && cp src/assets/trexpng.png dist/assets && cp src/assets/white-border.png dist/assets",
     "lint": "eslint .",
     "preview": "vite preview"
   },
